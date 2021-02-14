@@ -6,38 +6,45 @@ import NumericInput from 'react-numeric-input';
 import './style.css';
 import LocationSearchInput from '../addressForm/AddressForm';
 
-function DashboardNewsCard() {
+function DashboardNewsCard(props) {
 
     const [authState] = useAppContext();
 
+    const userID = authState.user._id;
+    console.log(userID);
     const [spaceFormState, setSpaceFormState] = useState({
-        userID: '',
+        userID: userID,
         address: '',
         cost: '',
-        image: null,
+        // image: null,
     });
 
     function myFormat(num) {
         return '$' + num;
     }
 
-    const userID = authState.user._id;
+    const eventhandler = (data) => {
+        console.log(data);
+        setSpaceFormState({ ...spaceFormState, address: data.address });
+
+        console.log(spaceFormState);
+    };
 
     const onChange = (e) => {
-        e.preventDefault();
-        setSpaceFormState({ ...spaceFormState, [e.target.name]: e.target.value });
-        setSpaceFormState({ ...spaceFormState, userID: userID })
-    };
+        console.log(e);
+        setSpaceFormState({ ...spaceFormState, cost: e });
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         console.log(spaceFormState);
 
         const space = {
             userID: spaceFormState.userID,
             address: spaceFormState.address,
             cost: spaceFormState.cost,
-            image: spaceFormState.image
+            // image: spaceFormState.image
         };
         try {
             const response = await postSpace(space);
@@ -59,8 +66,7 @@ function DashboardNewsCard() {
                                 type="string"
                                 className="form-control"
                                 name="address"
-                                value={spaceFormState.address}
-                                onChange={onChange}
+                                onChange={eventhandler}
                             />
                         </label>
                     </div>
@@ -69,22 +75,12 @@ function DashboardNewsCard() {
                             Cost/hr:
                             <NumericInput
                                 className="form-control"
+                                name="cost"
                                 precision={2}
                                 value={spaceFormState.cost}
                                 step={0.1}
-                                format={myFormat} />
-                        </label>
-                    </div>
-                    <div className="form-group">
-                        <label>
-                            Image:
-                            <input
-                                type="file"
-                                className="form-control"
-                                name="image"
-                                value={spaceFormState.image}
-                                onChange={onChange}
-                            />
+                                format={myFormat}
+                                onChange={onChange} />
                         </label>
                     </div>
                     <button type="submit" className="btn btn-lg btn-primary btn-block">

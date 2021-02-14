@@ -8,7 +8,7 @@ const Space = require('../../models/Space');
 router.use(cors());
 
 //methods for Spaces
-router.post('/api/post-space', (req, res) => {
+router.post('/api/postSpace', (req, res) => {
     const { errors, isValid } = validateSpaceInput(req.body);
 
     if (!isValid) {
@@ -21,6 +21,22 @@ router.post('/api/post-space', (req, res) => {
         if (response) {
             res.status(400).json({ address: 'address already exists' });
             return res.send('address already exists');
+        } else {
+            const today = new Date();
+            const spaceData = {
+                userID: req.body.userID,
+                address: req.body.address,
+                cost: req.body.cost,
+                image: req.body.image,
+                created: today,
+            };
+            Space.create(spaceData)
+                .then((space) => {
+                    res.json(space);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
         }
     });
 });

@@ -15,7 +15,7 @@ module.exports = function validateSpaceInput(data) {
 
     // cost checks
     if (Validator.isEmpty(data.cost)) {
-        errors.passworcostd = 'Cost field is required';
+        errors.cost = 'Cost field is required';
     }
 
     return {

@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
+import { GoogleApiWrapper } from 'google-maps-react';
 import PlacesAutocomplete, {
     geocodeByAddress,
     getLatLng,
 } from 'react-places-autocomplete';
 
-function LocationSearchInput(props) {
+export function LocationSearchInput(props) {
     const [addressState, setAddressState] = useState({
         address: '',
     });
 
     const handleChange = address => {
-        setAddressState({ ...addressState, address });
+        setAddressState({ ...addressState, address })
     };
 
     const handleSelect = address => {
@@ -19,6 +20,12 @@ function LocationSearchInput(props) {
             .then(latLng => console.log('Success', latLng))
             .catch(error => console.error('Error', error));
     };
+
+    React.useEffect(() => {
+        if (props.onChange) {
+            props.onChange(addressState)
+        }
+    }, [addressState.address])
 
     return (
         <PlacesAutocomplete
@@ -63,4 +70,6 @@ function LocationSearchInput(props) {
 }
 
 
-export default LocationSearchInput;
+export default GoogleApiWrapper({
+    apiKey: ('AIzaSyB-EOwh9Mb_fTJuXpGJJ8CIeqrhUwKGf9E')
+})(LocationSearchInput);
