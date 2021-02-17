@@ -1,0 +1,99 @@
+{
+    "gobbledegook": [],
+    "parkingSpaces": [
+        {
+            "formatted_address": "38 Glasgow Ave, Bondi Beach, NSW, 2026",
+            "geometry": {
+                "location": {
+                    "lat": -33.886969,
+                    "lng": 151.274450
+                }
+            },
+            "id": 1,
+            "types": [
+                " Compact",
+                " Motorcycle/scooter"
+            ],
+            "rating": 4.5,
+            "price_level": 1,
+            "open_now": true
+        },
+        {
+            "formatted_address": "Hugh Bamford Reserve, North Bondi, NSW, 2026",
+            "geometry": {
+                "location": {
+                    "lat": -33.883448,
+                    "lng": 151.283342
+                }
+            },
+            "id": 2,
+            "types": [
+                " Sedan",
+                " Compact",
+                " Motorcycle/scooter"
+            ],
+            "rating": 4,
+            "price_level": 1,
+            "open_now": true
+        },
+        {
+            "formatted_address": "23 Sir Thomas Mitchell Rd, Bondi Beach, NSW, 2026",
+            "geometry": {
+                "location": {
+                    "lat": -33.892478,
+                    "lng": 151.271226
+                }
+            },
+            "id": 3,
+            "types": [
+                " SUV/4WD",
+                " Van",
+                " Sedan",
+                " Compact",
+                " Motorcycle/scooter"
+            ],
+            "rating": 3,
+            "price_level": 1,
+            "open_now": true
+        },
+        {
+            "formatted_address": "67A Roscoe St, Bondi Beach, NSW, 2026",
+            "geometry": {
+                "location": {
+                    "lat": -33.889165,
+                    "lng": 151.272147
+                }
+            },
+            "id": 5,
+            "types": [
+                " SUV/4WD",
+                " Van",
+                " Sedan",
+                " Compact",
+                " Motorcycle/scooter"
+            ],
+            "rating": 4.9,
+            "price_level": 1,
+            "open_now": true
+        },
+        {
+            "formatted_address": "71 Beach Rd, Bondi Beach, NSW, 2026",
+            "geometry": {
+                "location": {
+                    "lat": -33.886278,
+                    "lng": 151.272667
+                }
+            },
+            "id": 5,
+            "types": [
+                " SUV/4WD",
+                " Sedan",
+                " Compact",
+                " Motorcycle/scooter"
+            ],
+            "rating": 2.1,
+            "price_level": 1,
+            "open_now": true
+        }
+    ]
+}

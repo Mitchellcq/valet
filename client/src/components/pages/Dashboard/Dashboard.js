@@ -1,6 +1,6 @@
 import React from 'react';
 import Sidebar from '../../Sidebar/Sidebar';
-import MapContainer from '../../map/Map';
+import Main from '../../map/Main';
 import { useAppContext } from '../../../store';
 
 function DashBoard() {
@@ -16,7 +16,7 @@ function DashBoard() {
                     Welcome {state.user.first_name} {state.user.last_name}
                 </h1>
                 <div className="mx-auto">
-                    <MapContainer />
+                    <Main />
                 </div>
             </div>
         </div>

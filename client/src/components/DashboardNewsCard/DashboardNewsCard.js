@@ -1,96 +1,122 @@
-import React, { useState } from 'react';
-import { useAppContext } from '../../store';
-import { postSpace } from '../../utils/spaceApis';
-import NumericInput from 'react-numeric-input';
 
-import './style.css';
-import LocationSearchInput from '../addressForm/AddressForm';
+import React, { Component } from 'react';
+import isEmpty from 'lodash.isempty';
 
-function DashboardNewsCard(props) {
+// components:
+import Marker from '../map/Marker';
+import { postSpace } from '../../utils/userApis';
+import MultiSelect from "@khanacademy/react-multi-select";
 
-    const [authState] = useAppContext();
+// examples:
+import GoogleMap from '../map/Map';
+import AutoComplete from '../map/AutoComplete';
 
-    const userID = authState.user._id;
-    console.log(userID);
-    const [spaceFormState, setSpaceFormState] = useState({
-        userID: userID,
-        address: '',
-        cost: '',
-        // image: null,
-    });
+// consts
+const Bondi = [-33.891716, 151.275783];
+const options = [
+    { label: " SUV/4WD", value: " SUV/4WD" },
+    { label: " Van", value: " Van" },
+    { label: " Sedan", value: " Sedan" },
+    { label: " Compact", value: " Compact" },
+    { label: " Motorcycle/Scooter", value: " Motorcycle/Scooter" },
+];
 
-    function myFormat(num) {
-        return '$' + num;
+class DashboardNewsCard extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            mapApiLoaded: false,
+            mapInstance: null,
+            mapApi: null,
+            places: [],
+            cost: 0,
+            types: [],
+        };
     }
 
-    const eventhandler = (data) => {
-        console.log(data);
-        setSpaceFormState({ ...spaceFormState, address: data.address });
-
-        console.log(spaceFormState);
+    apiHasLoaded = (map, maps) => {
+        this.setState({
+            mapApiLoaded: true,
+            mapInstance: map,
+            mapApi: maps,
+        });
     };
 
-    const onChange = (e) => {
-        console.log(e);
-        setSpaceFormState({ ...spaceFormState, cost: e });
-    }
+    addPlace = (place) => {
+        this.setState({ places: [place] });
+        console.log(this.state.places);
+    };
 
-    const handleSubmit = async (e) => {
+    handleCostChange = (e) => {
         e.preventDefault();
+        this.setState({ cost: e.target.value })
+        console.log(this.state.cost);
+    };
 
-        console.log(spaceFormState);
-
+    handleSubmit = (e) => {
+        e.preventDefault();
         const space = {
-            userID: spaceFormState.userID,
-            address: spaceFormState.address,
-            cost: spaceFormState.cost,
-            // image: spaceFormState.image
+            formatted_address: this.state.places[0].formatted_address,
+            geometry: this.state.places[0].geometry,
+            id: this.state.places[0].place_id,
+            types: this.state.types,
+            cost: this.state.cost
         };
-        try {
-            const response = await postSpace(space);
-            console.log(response);
-        } catch (error) {
-            console.log(error);
-        }
+
+        postSpace(space);
     }
 
-    return (
-        <div className="dashboardCard card cardBackground">
-            <div className="card-body">
-                <h1>Parking Space Submission form</h1>
-                <form noValidate onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <label>
-                            Address:
-                    <LocationSearchInput
-                                type="string"
-                                className="form-control"
-                                name="address"
-                                onChange={eventhandler}
-                            />
-                        </label>
-                    </div>
-                    <div className="form-group">
-                        <label>
-                            Cost/hr:
-                            <NumericInput
-                                className="form-control"
-                                name="cost"
-                                precision={2}
-                                value={spaceFormState.cost}
-                                step={0.1}
-                                format={myFormat}
-                                onChange={onChange} />
-                        </label>
-                    </div>
-                    <button type="submit" className="btn btn-lg btn-primary btn-block">
-                        Submit
-                    </button>
+    render() {
+        const {
+            places, mapApiLoaded, mapInstance, mapApi, types,
+        } = this.state;
+        return (
+            <>
+                {mapApiLoaded && (
+                    <AutoComplete map={mapInstance} mapApi={mapApi} addplace={this.addPlace} />
+                )}
+                <form onSubmit={this.handleSubmit}>
+                    <input
+                        className="form-control"
+                        type="number"
+                        onFocus={this.clearSearchBox}
+                        onChange={this.handleCostChange}
+                        placeholder="Name your Price"
+                        value={this.state.cost}
+                    />
+                    <br />
+                    <MultiSelect
+                        options={options}
+                        selected={types}
+                        onSelectedChanged={types => { this.setState({ types }); console.log(this.state.types); }}
+                    />
+                    <br />
                 </form>
-            </div>
-        </div>
-
-    );
+                <br />
+                <GoogleMap
+                    defaultZoom={10}
+                    defaultCenter={Bondi}
+                    bootstrapURLKeys={{
+                        key: process.env.REACT_APP_GOOGLE_API,
+                        libraries: ['places', 'geometry'],
+                    }}
+                    yesIWantToUseGoogleMapApiInternals
+                    onGoogleApiLoaded={({ map, maps }) => this.apiHasLoaded(map, maps)}
+                >
+                    {!isEmpty(places)
+                        && places.map((place) => (
+                            <Marker
+                                key={place.id}
+                                text={place.name}
+                                lat={place.geometry.location.lat()}
+                                lng={place.geometry.location.lng()}
+                            />
+                        ))}
+                </GoogleMap>
+            </>
+        );
+    }
 }
 
 export default DashboardNewsCard;

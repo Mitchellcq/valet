@@ -1,25 +1,26 @@
 const mongoose = require('mongoose');
 
 const SpaceSchema = new mongoose.Schema({
-    userID: {
+    id: {
         type: Number,
         required: true,
     },
-    address: {
+    formatted_address: {
         type: String,
         required: true,
     },
-    cost: {
-        type: String,
-        required: true,
-    },
-    image: {
-        data: Buffer,
-        contentType: String,
-    },
-    available: {
+    types: Array,
+    geometry: Object,
+    open_now: {
         type: Boolean,
+        default: true,
     },
+    rating: {
+        type: Number,
+        default: 5,
+    },
+    price_level: Number,
+    cost: Number,
 });
 
 module.exports = mongoose.model('spaces', SpaceSchema);

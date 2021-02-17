@@ -10,6 +10,7 @@ const validateLoginInput = require('../../validation/login');
 
 // Load User model
 const User = require('../../models/User');
+const Space = require('../../models/Space');
 router.use(cors());
 
 router.post('/api/register', (req, res) => {
@@ -113,6 +114,47 @@ router.get('/api/displayusers', (req, res) => {
                 res.json(response);
             } else {
                 res.status(400).json({ error: 'Users do not exist' });
+            }
+        })
+        .catch((err) => {
+            res.send('error: ' + err);
+        });
+});
+
+router.post('/api/postSpace', (req, res) => {
+    Space.findOne({
+        id: req.body.id,
+    }).then((response) => {
+        if (response) {
+            res.status(400).json({ address: 'address already exists' });
+            return res.send('address already exists');
+        } else {
+            const spaceData = {
+                id: req.body.id,
+                formatted_address: req.body.address,
+                types: req.body.types,
+                geometry: req.body.geometry,
+                price_level: req.body.price_level,
+                cost: req.cody.cost,
+            };
+            Space.create(spaceData)
+                .then((space) => {
+                    res.json(space);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+    });
+});
+
+router.get('/api/getSpaces', (req, res) => {
+    Space.find()
+        .then((response) => {
+            if (response) {
+                res.json(response);
+            } else {
+                res.status(400).json({ error: 'spaces do not exist' });
             }
         })
         .catch((err) => {

@@ -25,3 +25,19 @@ export const getUser = () => {
 export const getUsers = () => {
     return axios.get('/api/displayusers')
 };
+
+export const postSpace = (spaceData) => {
+    console.log('Posting your parking space:' + spaceData)
+    return axios.post('/api/postSpace', {
+        id: spaceData.id,
+        formatted_address: spaceData.address,
+        types: spaceData.types,
+        cost: spaceData.cost,
+        geometry: spaceData.geometry,
+        price_level: spaceData.price_level,
+    });
+};
+
+export const getSpace = () => {
+    return axios.get('/api/getSpace');
+};
