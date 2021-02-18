@@ -30,7 +30,7 @@ class DashboardNewsCard extends Component {
             mapInstance: null,
             mapApi: null,
             places: [],
-            cost: 0,
+            cost: '',
             types: [],
         };
     }
@@ -50,7 +50,8 @@ class DashboardNewsCard extends Component {
 
     handleCostChange = (e) => {
         e.preventDefault();
-        this.setState({ cost: e.target.value })
+        let amount = parseInt(e.target.value, 10)
+        this.setState({ cost: amount })
         console.log(this.state.cost);
     };
 
@@ -72,27 +73,27 @@ class DashboardNewsCard extends Component {
             places, mapApiLoaded, mapInstance, mapApi, types,
         } = this.state;
         return (
-            <>
+            <><form onSubmit={this.handleSubmit}>
                 {mapApiLoaded && (
                     <AutoComplete map={mapInstance} mapApi={mapApi} addplace={this.addPlace} />
                 )}
-                <form onSubmit={this.handleSubmit}>
-                    <input
-                        className="form-control"
-                        type="number"
-                        onFocus={this.clearSearchBox}
-                        onChange={this.handleCostChange}
-                        placeholder="Name your Price"
-                        value={this.state.cost}
-                    />
-                    <br />
-                    <MultiSelect
-                        options={options}
-                        selected={types}
-                        onSelectedChanged={types => { this.setState({ types }); console.log(this.state.types); }}
-                    />
-                    <br />
-                </form>
+
+                <input
+                    className="form-control"
+                    type="text"
+                    onChange={this.handleCostChange}
+                    placeholder="Name your Price"
+                    value={this.state.cost}
+                />
+                <br />
+                <MultiSelect
+                    options={options}
+                    selected={types}
+                    onSelectedChanged={types => { this.setState({ types }); console.log(this.state.types); }}
+                />
+                <br />
+                <input type="submit" className="form-control" value="Submit" />
+            </form>
                 <br />
                 <GoogleMap
                     defaultZoom={10}

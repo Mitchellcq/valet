@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import isEmpty from 'lodash.isempty';
-// import axios from 'axios';
+import axios from 'axios';
 
 // components:
 import GoogleMap from './Map';
@@ -29,6 +29,7 @@ const getInfoWindowString = (place) => `
       <div style="font-size: 14px; color: green;">
         ${place.open_now ? 'Open' : 'Closed'}
       </div>
+      <button onclick="myFunction()">Book</button>
     </div>`;
 
 // Refer to https://github.com/google-map-react/google-map-react#use-google-maps-api
@@ -45,9 +46,10 @@ const handleApiLoaded = (map, maps, places) => {
             map,
         }));
 
-        infowindows.push(new maps.InfoWindow({
-            content: getInfoWindowString(place),
-        }));
+        infowindows.push(
+            new maps.InfoWindow({
+                content: getInfoWindowString(place),
+            }));
     });
 
     markers.forEach((marker, i) => {
@@ -68,22 +70,13 @@ class Main extends Component {
 
     componentDidMount() {
 
-        // axios.get('/api/getSpaces')
-        //     .then((res) => {
-        //         console.log(res);
-        //         res.forEach((space) => {
-        //             space.show = false;
-        //         });
-        //         this.setState({ places: res });
-        //     });
-
-        fetch('places.json')
-            .then((response) => response.json())
-            .then((data) => {
-                data.parkingSpaces.forEach((space) => {
+        axios.get('/api/getSpaces')
+            .then((response) => {
+                console.log("Response:" + JSON.stringify(response));
+                response.data.forEach((space) => {
                     space.show = false; // eslint-disable-line no-param-reassign
                 });
-                this.setState({ places: data.parkingSpaces });
+                this.setState({ places: response.data });
             });
     }
 

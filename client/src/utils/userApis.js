@@ -27,14 +27,14 @@ export const getUsers = () => {
 };
 
 export const postSpace = (spaceData) => {
-    console.log('Posting your parking space:' + spaceData)
+    console.log('Posting your parking space:' + spaceData.id + ";" + spaceData.cost)
     return axios.post('/api/postSpace', {
         id: spaceData.id,
-        formatted_address: spaceData.address,
+        formatted_address: spaceData.formatted_address,
         types: spaceData.types,
         cost: spaceData.cost,
         geometry: spaceData.geometry,
-        price_level: spaceData.price_level,
+        price_level: spaceData.cost / 2,
     });
 };
 

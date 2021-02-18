@@ -19,6 +19,7 @@ router.post('/api/register', (req, res) => {
 
     // Check validation
     if (!isValid) {
+        console.log(errors);
         return res.status(400).json(errors);
     }
 
@@ -131,11 +132,11 @@ router.post('/api/postSpace', (req, res) => {
         } else {
             const spaceData = {
                 id: req.body.id,
-                formatted_address: req.body.address,
+                formatted_address: req.body.formatted_address,
                 types: req.body.types,
                 geometry: req.body.geometry,
                 price_level: req.body.price_level,
-                cost: req.cody.cost,
+                cost: req.body.cost,
             };
             Space.create(spaceData)
                 .then((space) => {
